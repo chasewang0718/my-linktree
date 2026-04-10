@@ -45,7 +45,38 @@
           </svg>
           GitHub
         </a>
+        <button id="quote-btn" class="px-6 py-3 rounded-xl bg-blue-500 text-white font-semibold shadow-md hover:bg-blue-600 transition duration-150">
+          获取今日专属名言
+        </button>
+        <p id="quote-display" class="text-center text-gray-500 italic">
+          <!-- 这里用来展示名言 -->
+        </p>
       </div>
     </main>
+    <script>
+      const quoteBtn = document.getElementById("quote-btn");
+      const quoteDisplay = document.getElementById("quote-display");
+      const webhookUrl = "http://localhost:5678/webhook-test/ff4bbd17-0443-4c21-8485-7782421cdfa8?name=1234567890";
+
+      quoteBtn.addEventListener("click", async () => {
+        quoteBtn.textContent = "正在呼叫工厂...";
+        quoteBtn.disabled = true;
+
+        try {
+          const response = await fetch(webhookUrl);
+          if (!response.ok) {
+            throw new Error("Request failed");
+          }
+
+          const data = await response.json();
+          quoteDisplay.textContent = data.my_daily_quote || "今日暂无名言返回";
+        } catch (error) {
+          quoteDisplay.textContent = "呼叫失败，请检查 n8n 工厂是否已通电";
+        } finally {
+          quoteBtn.textContent = "获取今日专属名言";
+          quoteBtn.disabled = false;
+        }
+      });
+    </script>
   </body>
 </html>
