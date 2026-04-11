@@ -64,17 +64,22 @@
       const quoteDisplay = document.getElementById("quote-display");
       const userNameInput = document.getElementById("user-name-input");
       const webhookBaseUrl =
-        "https://nicholas-supplies-maternity-cheque.trycloudflare.com/webhook-test/ff4bbd17-0443-4c21-8485-7782421cdfa8";
+        "https://washing-acquisitions-against-excellence.trycloudflare.com ";
 
       quoteBtn.addEventListener("click", async () => {
         const name = userNameInput.value === "" ? "神秘访客" : userNameInput.value;
-        const webhookUrl = `${webhookBaseUrl}?name=${encodeURIComponent(name)}`;
 
         quoteBtn.textContent = "正在呼叫工厂...";
         quoteBtn.disabled = true;
 
         try {
-          const response = await fetch(webhookUrl);
+          const response = await fetch(webhookBaseUrl, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ name }),
+          });
           if (!response.ok) {
             throw new Error("Request failed");
           }
